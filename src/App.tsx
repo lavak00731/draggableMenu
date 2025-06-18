@@ -10,6 +10,7 @@ function App() {
   return (
     <>
       <RoutesNav pages={pages} />
+      <Nav pages={pages} />
     </>
   )
 
