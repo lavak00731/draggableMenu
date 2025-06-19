@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom"
 import type { pagesTypes } from "../types/pagesTypes"
-import { Plus, Info, CircleCheck, FileText } from 'lucide-react';
+import { Plus, Info, CircleCheck, FileText, EllipsisVertical } from 'lucide-react';
 
 export const Nav = ({pages}:{ pages: pagesTypes[] }) => {
   const iconsAssignation = (i: number) => {
@@ -25,6 +25,7 @@ export const Nav = ({pages}:{ pages: pagesTypes[] }) => {
                                <NavLink className="flex flex-row items-center gap-1.5 font-inter leading-5 capitalize font-medium text-sm  focus-visible:text-zinc-900 focus-visible:outline-0" to={page.route}>
                                   {iconsAssignation(i)}
                                   {page.name}
+                                  <EllipsisVertical  />
                                 </NavLink>
                                 <button type="button" aria-hidden="true" tabIndex={-1} className="rounded-full border bg-white text-black">
                                   <Plus size={16}/> 
