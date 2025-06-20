@@ -18,16 +18,16 @@ export const Nav = ({pages}:{ pages: pagesTypes[] }) => {
     }
   }
   return (
-    <nav className="bg-gray-50 drop-shadow-md p-5 border-neutral-200 border-t text-center">
-        <ul className="inline-flex flex-row  relative">
+    <nav className="bg-gray-50 drop-shadow-md p-5 border-neutral-200 border-t text-center inline-block mx-auto ">
+        <ul className="inline-flex flex-row">
             {
                 pages.map((page:pagesTypes) =>{
-                    return <li className="relative group hover:pr-9 before:content-[''] before:block before:absolute before:left-0 before:top-3/6 before:-translate-y-3/6 before:border-stone-300 before:border-dashed before:border-t-1 before:w-full before:h-0 before:-z-10"   key={page.id}>
+                    return <li className="relative group hover:pr-9" key={page.id}>
                     <NavLink
                         className={({ isActive }) =>
                           isActive
-                            ? "py-1.5 px-2.5 border-neutral-200 border-1 rounded-lg  text-zinc-900 hover:bg-gray-400/[.35] focus-within:border-blue-600 focus-within:border-1 focus-within:bg-white focus-within:shadow-[0px_0px_0px_1.5px_#2f27e225] flex flex-row items-center gap-1.5 font-inter leading-5 capitalize font-medium text-sm  focus-visible:text-zinc-900 focus-visible:outline-0  has-[aria-current='page']:bg-white mr-5 relative z-10" // Active styles
-                            : "py-1.5 px-2.5 border-neutral-200 border-1 rounded-lg  text-slate-500 bg-gray-400/[.15]  hover:bg-gray-400/[.35] focus-within:border-blue-600 focus-within:border-1 focus-within:bg-white focus-within:shadow-[0px_0px_0px_1.5px_#2f27e225] flex flex-row items-center gap-1.5 font-inter leading-5 capitalize font-medium text-sm  focus-visible:text-zinc-900 focus-visible:outline-0 mr-5 relative z-10" // Inactive styles
+                            ? "py-1.5 px-2.5 border-neutral-200 border-1 rounded-lg  text-zinc-900 hover:bg-gray-400/[.35] focus-within:border-blue-600 focus-within:border-1 focus-within:bg-white focus-within:shadow-[0px_0px_0px_1.5px_#2f27e225] flex flex-row items-center gap-1.5 font-inter leading-5 capitalize font-medium text-sm  focus-visible:text-zinc-900 focus-visible:outline-0  has-[aria-current='page']:bg-white mr-5" // Active styles
+                            : "py-1.5 px-2.5 border-neutral-200 border-1 rounded-lg  text-slate-500 bg-gray-400/[.15]  hover:bg-gray-400/[.35] focus-within:border-blue-600 focus-within:border-1 focus-within:bg-white focus-within:shadow-[0px_0px_0px_1.5px_#2f27e225] flex flex-row items-center gap-1.5 font-inter leading-5 capitalize font-medium text-sm  focus-visible:text-zinc-900 focus-visible:outline-0 mr-5" // Inactive styles
                         }
                         to={page.route}
                       >
@@ -40,7 +40,7 @@ export const Nav = ({pages}:{ pages: pagesTypes[] }) => {
                         )}
                       </NavLink>
 
-                      <button type="button" aria-hidden="true" tabIndex={-1} className="rounded-full border bg-white text-black hidden absolute group-hover:block group-hover:right-5 group-hover:top-6/12 group-hover:-translate-y-6/12">
+                      <button type="button" aria-hidden="true" tabIndex={-1} className="rounded-full border bg-white text-black hidden absolute group-hover:block group-hover:right-5 group-hover:top-6/12 group-hover:-translate-y-6/12 cursor-pointer ">
                         <Plus size={16}/> 
                         <span className="sr-only">Add Page</span>
                       </button>                        
