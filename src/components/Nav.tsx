@@ -10,6 +10,7 @@ import {
   FileText,
   EllipsisVertical,
 } from "lucide-react";
+import { ContextualMenu } from "./ContextualMenu";
 
 export const Nav = () => {
   const [isOpened, setisOpened] = useState(false);
@@ -45,7 +46,10 @@ export const Nav = () => {
   const handleAddPage = ()=> {
     setisOpened(true);
   }
-  
+  const handleRightClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    console.log(e)
+  }
 
   if(pages.length > 0) {
     return (
@@ -63,6 +67,7 @@ export const Nav = () => {
                         : "py-1.5 px-2.5 border-neutral-200 border-1 rounded-lg  text-slate-500 bg-gray-400/[.15]  hover:bg-gray-400/[.35] focus-within:border-blue-600 focus-within:border-1 focus-within:bg-white focus-within:shadow-[0px_0px_0px_1.5px_#2f27e225] flex flex-row items-center gap-1.5 font-inter leading-5 capitalize font-medium text-sm  focus-visible:text-zinc-900 focus-visible:outline-0 mr-5" // Inactive styles
                   }
                   to={page.route}
+                  onContextMenu={handleRightClick}
                 >
                   {({ isActive }) => (
                     <>
@@ -80,7 +85,7 @@ export const Nav = () => {
                   type="button"
                   aria-hidden="true"
                   tabIndex={-1}
-                  onClick= {handleAddPage}
+                  onClick= {(e) => handleAddPage(e)}
                   className="rounded-full border bg-white text-black hidden absolute group-hover:block group-hover:right-5 group-hover:top-6/12 group-hover:-translate-y-6/12 cursor-pointer "
                 >
                   <Plus size={16} />
@@ -97,6 +102,7 @@ export const Nav = () => {
         </ul>
       </nav>
       <ModalForm isOpened={isOpened} setisOpened={setisOpened} addPage={addPage} />
+      <ContextualMenu />
     </>
   );
   } 
