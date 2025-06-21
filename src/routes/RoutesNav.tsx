@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom"
+import { Route, Routes, Navigate } from "react-router-dom"
 import { Page } from "../views/Page";
 import { Pages } from "../context/context";
 import type { pagesTypes } from "../types/pagesTypes";
@@ -11,7 +11,6 @@ export const RoutesNav = () => {
        return null;
   }
   const { pages } = context as { pages: pagesTypes[] };
-  console.log(pages)
   if(pages && pages.length > 0) {
     return (
     <Routes>
@@ -24,6 +23,7 @@ export const RoutesNav = () => {
           />
         )) 
       }
+      <Route path={"/*"} element={<Navigate to="/" replace />} />
     </Routes>
   )
   }

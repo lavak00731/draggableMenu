@@ -20,7 +20,6 @@ export const Nav = () => {
   const { pages, setPages } = context as { pages: pagesTypes[]; setPages: React.Dispatch<React.SetStateAction<pagesTypes[]>> };
 
  const addPage = (newPage:string)=>{
-  console.log(newPage);
   const template = {
         "id": Date.now(),
         "name": newPage,
@@ -28,8 +27,7 @@ export const Nav = () => {
         "content": newPage
     }
     const newPageCollection = [...pages, template]
-    setPages(newPageCollection)
-
+    setPages(newPageCollection);
  }
   const iconsAssignation = (name: string, isActive: boolean) => {
     const color = isActive ? "#F59D0E" : "#8C93A1";    
