@@ -1,6 +1,5 @@
 import { createContext } from 'react';
-import type { pagesTypes } from '../types/pagesTypes';
-import pagesBase from '../lib/pagesBase'
+import type { PagesContextType } from '../types/PagesContextType';
 
-export const Pages = createContext<pagesTypes[] | null>(pagesBase);
+export const Pages = createContext<PagesContextType | null>(null);
 

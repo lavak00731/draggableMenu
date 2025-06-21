@@ -10,10 +10,27 @@ import {
   FileText,
   EllipsisVertical,
 } from "lucide-react";
-type ChangePagesFn = (newPages: pagesTypes[]) => void; 
-export const Nav = (changePages: ChangePagesFn) => {
-  const pages = useContext(Pages);
-  const [isOpened, setisOpened] = useState(false)
+
+export const Nav = () => {
+  const [isOpened, setisOpened] = useState(false);
+   const context = useContext(Pages);
+  if (!context) {
+       return null;
+  }
+  const { pages, setPages } = context as { pages: pagesTypes[]; setPages: React.Dispatch<React.SetStateAction<pagesTypes[]>> };
+
+ const addPage = (newPage:string)=>{
+  console.log(newPage);
+  const template = {
+        "id": Date.now(),
+        "name": newPage,
+        "route": "/"+newPage,
+        "content": newPage
+    }
+    const newPageCollection = [...pages, template]
+    setPages(newPageCollection)
+
+ }
   const iconsAssignation = (name: string, isActive: boolean) => {
     const color = isActive ? "#F59D0E" : "#8C93A1";    
     switch (name) {
@@ -28,10 +45,11 @@ export const Nav = (changePages: ChangePagesFn) => {
     }
   };
   const handleAddPage = ()=> {
-    setisOpened(true)
+    setisOpened(true);
   }
+  
 
-  if(pages) {
+  if(pages.length > 0) {
     return (
     <>
       <nav className="bg-gray-50 drop-shadow-md p-5 border-neutral-200 border-t text-center mx-auto ">
@@ -80,7 +98,7 @@ export const Nav = (changePages: ChangePagesFn) => {
           </li>
         </ul>
       </nav>
-      <ModalForm isOpened={isOpened} setisOpened={setisOpened} />
+      <ModalForm isOpened={isOpened} setisOpened={setisOpened} addPage={addPage} />
     </>
   );
   } 

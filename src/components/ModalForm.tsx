@@ -1,10 +1,19 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 
-export const ModalForm = ({ isOpened, setisOpened }: { isOpened: boolean, setisOpened: (boolean)=> void }) => {
+export const ModalForm = ({ isOpened, setisOpened, addPage }: { isOpened: boolean, setisOpened: (value: boolean) => void, addPage: (value:string) => void }) => {
   const [formvalue, setFormvalue] = useState("");
   const closeModal = () => {
     setisOpened(false)
+  }
+  const resetForm = ()=>{
+    closeModal();
+    setFormvalue("")
+  }
+  const handleSubmit = (e:SubmitEvent) => {
+    e.preventDefault();
+    addPage(formvalue);
+    resetForm();
   }
   return (
     <div
@@ -27,7 +36,7 @@ export const ModalForm = ({ isOpened, setisOpened }: { isOpened: boolean, setisO
           <h2 className="text-3xl mb-2 font-inter" id="form-title">
             Add a New Page
           </h2>
-          <form action="" className="">
+          <form action="" className="" onSubmit={(e)=> handleSubmit(e)}>
             <div className="mb-2">
               <label htmlFor="newpage" className="mb-2 font-inter">
                 New Page Name
