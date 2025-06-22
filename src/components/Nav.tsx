@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import type { pagesTypes } from "../types/pagesTypes";
 import { ModalForm } from "./ModalForm";
-import { useContext, useState} from "react";
+import { useContext, useEffect, useState, useRef, type ReactElement} from "react";
 import { Pages } from "../context/context";
 import {
   Plus,
@@ -16,23 +16,56 @@ export const Nav = () => {
   const [isOpened, setisOpened] = useState(false);
   const [contextIsOpen, setContextIsOpen] = useState(false);
   const [contextualPosition, setContextualPosition] = useState({x:0, y:0});
-  const [pageToModify, setPageToModify] = useState<pagesTypes | undefined>()
+  const [pageToModify, setPageToModify] = useState<pagesTypes | null>(null)
   const context = useContext(Pages);
+  const keyDownHandler = (e: KeyboardEvent) => {
+    if (e.code === 'Escape') {
+      setisOpened(false)
+      setContextIsOpen(false)
+    }
+  };
+  useEffect(() => {
+    document.addEventListener('keydown', keyDownHandler);
+
+    return () => {
+      document.removeEventListener('keydown', keyDownHandler);
+    };
+  }, );
+  
+    useEffect(() => {
+      const handleClickOutside = (e:MouseEvent) => {
+        const target = e.target as HTMLElement
+        console.log(target);
+        console.log(target.closest('#contextMenu'))
+        if (target && target.closest('#contextMenu')) {
+          setContextIsOpen(true);
+        } else {
+          setContextIsOpen(false)
+        }
+      }
+
+        document.addEventListener('mousedown', handleClickOutside)
+
+      return () => {
+        document.addEventListener('mousedown', handleClickOutside)
+      }
+    })
+    
   
   if (!context) {
-       return null;
+    return null;
   }
   const { pages, setPages } = context as { pages: pagesTypes[]; setPages: React.Dispatch<React.SetStateAction<pagesTypes[]>> };
   
   const addPage = (newPage:string)=>{
-  const template = {
-        "id": Date.now(),
-        "name": newPage,
-        "route": "/"+newPage,
-        "content": newPage
-    }
-    const newPageCollection = [...pages, template]
-    setPages(newPageCollection);
+    const template = {
+          "id": Date.now(),
+          "name": newPage,
+          "route": "/"+newPage,
+          "content": newPage
+      }
+      const newPageCollection = [...pages, template]
+      setPages(newPageCollection);
  }
   const iconsAssignation = (name: string, isActive: boolean) => {
     const color = isActive ? "#F59D0E" : "#8C93A1";    
@@ -55,14 +88,17 @@ export const Nav = () => {
     const target = e.nativeEvent.target as HTMLElement;
     const contexM = document.querySelector('#contextMenu');
     if(target) {
-      const {left} = target.getBoundingClientRect();     
+      const {left} = target.getBoundingClientRect();   
+      const contexHeight = contexM?.clientHeight;      
       setContextIsOpen(true)
-      const contexHeight = contexM?.clientHeight;
+      setPageToModify(page);
       if(contexHeight) setContextualPosition({x:left + 20, y:-contexHeight})
+       // console.log(left)
+        //console.log(contextualPosition)
     }
-    setPageToModify(page);
+    
   }
-
+  
   if(pages.length > 0) {
     return (
     <>

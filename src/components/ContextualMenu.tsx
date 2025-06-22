@@ -1,10 +1,12 @@
-import contextMenu from "../lib/contextMenu"
-import type { ContextualModalType } from "../types/contextualModalType"
-export const ContextualMenu = ({contextIsOpen, contextualPosition, pageToModify}:ContextualModalType) => {
-    console.log(pageToModify)
 
+import contextMenu from "../lib/contextMenu"
+import type { ContextualModalType } from "../types/ContextualModalType"
+export const ContextualMenu = ({contextIsOpen, contextualPosition, pageToModify}:ContextualModalType) => {
+    //in order to make logic to modify the page
+    console.log(pageToModify)
+    
   return (
-    <div id="contextMenu" role="dialog" aria-modal="true" aria-labelledby="modalId2" tabIndex={-1} 
+    <div id="contextMenu"role="dialog" aria-modal="true" aria-labelledby="modalId2" tabIndex={-1} 
     className={
         contextIsOpen ? "w-[240px] border-1 border-neutral-200 rounded-lg bg-white absolute "
                       : "w-[240px] border-1 border-neutral-200 rounded-lg bg-white absolute hidden"
@@ -19,7 +21,7 @@ export const ContextualMenu = ({contextIsOpen, contextualPosition, pageToModify}
             {
                 contextMenu.map((item) =>{
                     return <li key={item.id}>
-                        <button type="button" className="border-0 bg-none flex flex-row gap-x-1 items-center">
+                        <button type="button" className="border-0 bg-none flex flex-row gap-x-1 items-center cursor-pointer">
                             <item.icon className="pointer-events-none" size={item.size} fill={item.fill} color={item.color}/>
                             <span className="pointer-events-none">{item.name}</span>
                         </button>

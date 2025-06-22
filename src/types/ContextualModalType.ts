@@ -5,5 +5,6 @@ export interface ContextualModalType {
         x: number,
         y: number
     },
-    pageToModify: pagesTypes,
+    pageToModify: pagesTypes | null,
+
 }
