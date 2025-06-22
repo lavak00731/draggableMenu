@@ -14,13 +14,17 @@ import { ContextualMenu } from "./ContextualMenu";
 
 export const Nav = () => {
   const [isOpened, setisOpened] = useState(false);
-   const context = useContext(Pages);
+  const [contextIsOpen, setContextIsOpen] = useState(false);
+  const [contextualPosition, setContextualPosition] = useState({x:0, y:0});
+  const [pageToModify, setPageToModify] = useState<pagesTypes | undefined>()
+  const context = useContext(Pages);
+  
   if (!context) {
        return null;
   }
   const { pages, setPages } = context as { pages: pagesTypes[]; setPages: React.Dispatch<React.SetStateAction<pagesTypes[]>> };
-
- const addPage = (newPage:string)=>{
+  
+  const addPage = (newPage:string)=>{
   const template = {
         "id": Date.now(),
         "name": newPage,
@@ -46,15 +50,23 @@ export const Nav = () => {
   const handleAddPage = ()=> {
     setisOpened(true);
   }
-  const handleRightClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleRightClick = (e: React.MouseEvent, page:pagesTypes) => {
     e.preventDefault();
-    console.log(e)
+    const target = e.nativeEvent.target as HTMLElement;
+    const contexM = document.querySelector('#contextMenu');
+    if(target) {
+      const {left} = target.getBoundingClientRect();     
+      setContextIsOpen(true)
+      const contexHeight = contexM?.clientHeight;
+      if(contexHeight) setContextualPosition({x:left + 20, y:-contexHeight})
+    }
+    setPageToModify(page);
   }
 
   if(pages.length > 0) {
     return (
     <>
-      <nav className="bg-gray-50 drop-shadow-md p-5 border-neutral-200 border-t text-center mx-auto ">
+      <nav className="bg-gray-50 drop-shadow-md p-5 border-neutral-200 border-t text-center mx-auto relative">
         <ul className="inline-flex flex-row">
           { pages.map((page: pagesTypes) => {
             return (
@@ -67,7 +79,8 @@ export const Nav = () => {
                         : "py-1.5 px-2.5 border-neutral-200 border-1 rounded-lg  text-slate-500 bg-gray-400/[.15]  hover:bg-gray-400/[.35] focus-within:border-blue-600 focus-within:border-1 focus-within:bg-white focus-within:shadow-[0px_0px_0px_1.5px_#2f27e225] flex flex-row items-center gap-1.5 font-inter leading-5 capitalize font-medium text-sm  focus-visible:text-zinc-900 focus-visible:outline-0 mr-5" // Inactive styles
                   }
                   to={page.route}
-                  onContextMenu={handleRightClick}
+                  onContextMenu={(e) => handleRightClick(e, page)}
+                  aria-controls="contextMenu"
                 >
                   {({ isActive }) => (
                     <>
@@ -85,7 +98,7 @@ export const Nav = () => {
                   type="button"
                   aria-hidden="true"
                   tabIndex={-1}
-                  onClick= {(e) => handleAddPage(e)}
+                  onClick= {() => handleAddPage()}
                   className="rounded-full border bg-white text-black hidden absolute group-hover:block group-hover:right-5 group-hover:top-6/12 group-hover:-translate-y-6/12 cursor-pointer "
                 >
                   <Plus size={16} />
@@ -100,9 +113,16 @@ export const Nav = () => {
             </button>
           </li>
         </ul>
+        
+          <ContextualMenu
+            contextIsOpen={contextIsOpen}
+            contextualPosition={contextualPosition}
+            pageToModify={pageToModify}
+          />
+        
       </nav>
-      <ModalForm isOpened={isOpened} setisOpened={setisOpened} addPage={addPage} />
-      <ContextualMenu />
+      <ModalForm isOpened={isOpened} setisOpened={setisOpened} addPage={addPage}/>
+      
     </>
   );
   } 
