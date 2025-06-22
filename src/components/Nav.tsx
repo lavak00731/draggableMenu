@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import type { pagesTypes } from "../types/pagesTypes";
 import { ModalForm } from "./ModalForm";
-import { useContext, useEffect, useState, useRef, type ReactElement} from "react";
+import { useContext, useEffect, useState,} from "react";
 import { Pages } from "../context/context";
 import {
   Plus,
@@ -10,7 +10,7 @@ import {
   FileText,
   EllipsisVertical,
 } from "lucide-react";
-import { ContextualMenu } from "./ContextualMenu";
+import ContextualMenu from "./ContextualMenu";
 
 export const Nav = () => {
   const [isOpened, setisOpened] = useState(false);
@@ -18,25 +18,25 @@ export const Nav = () => {
   const [contextualPosition, setContextualPosition] = useState({x:0, y:0});
   const [pageToModify, setPageToModify] = useState<pagesTypes | null>(null)
   const context = useContext(Pages);
+  //close modals by keyboard
   const keyDownHandler = (e: KeyboardEvent) => {
     if (e.code === 'Escape') {
       setisOpened(false)
       setContextIsOpen(false)
     }
   };
+  //close keyboard event
   useEffect(() => {
     document.addEventListener('keydown', keyDownHandler);
 
     return () => {
       document.removeEventListener('keydown', keyDownHandler);
     };
-  }, );
-  
+  } );
+  //close contextual menu clicking outside
     useEffect(() => {
       const handleClickOutside = (e:MouseEvent) => {
         const target = e.target as HTMLElement
-        console.log(target);
-        console.log(target.closest('#contextMenu'))
         if (target && target.closest('#contextMenu')) {
           setContextIsOpen(true);
         } else {
@@ -83,20 +83,18 @@ export const Nav = () => {
   const handleAddPage = ()=> {
     setisOpened(true);
   }
-  const handleRightClick = (e: React.MouseEvent, page:pagesTypes) => {
+  const handleRightClick = (e: React.MouseEvent, page: pagesTypes) => {
     e.preventDefault();
     const target = e.nativeEvent.target as HTMLElement;
     const contexM = document.querySelector('#contextMenu');
-    if(target) {
-      const {left} = target.getBoundingClientRect();   
-      const contexHeight = contexM?.clientHeight;      
-      setContextIsOpen(true)
+    if (target) {
+      const { left } = target.getBoundingClientRect();
+      const contexHeight = contexM?.clientHeight ?? 0;
+      const newPosition = { x: left + 20, y: -contexHeight };
       setPageToModify(page);
-      if(contexHeight) setContextualPosition({x:left + 20, y:-contexHeight})
-       // console.log(left)
-        //console.log(contextualPosition)
+      setContextualPosition(newPosition);
+      setContextIsOpen(true);
     }
-    
   }
   
   if(pages.length > 0) {

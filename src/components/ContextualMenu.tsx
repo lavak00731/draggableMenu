@@ -1,7 +1,9 @@
 
+import {memo} from 'react'
 import contextMenu from "../lib/contextMenu"
+
 import type { ContextualModalType } from "../types/ContextualModalType"
-export const ContextualMenu = ({contextIsOpen, contextualPosition, pageToModify}:ContextualModalType) => {
+const ContextualMenu = ({contextIsOpen, contextualPosition, pageToModify}:ContextualModalType) => {
     //in order to make logic to modify the page
     console.log(pageToModify)
     
@@ -33,3 +35,4 @@ export const ContextualMenu = ({contextIsOpen, contextualPosition, pageToModify}
     </div>
   )
 }
+export default memo(ContextualMenu)
