@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 export const ModalForm = ({ isOpened, setisOpened, addPage }: { isOpened: boolean, setisOpened: (value: boolean) => void, addPage: (value:string) => void }) => {
   const [formvalue, setFormvalue] = useState("");
   //focus modal
-  const firstFocusable = useRef<HTMLInputElement>(null)
+  const firstFocusable = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if(isOpened  && firstFocusable.current ) {
       firstFocusable.current.focus()
@@ -33,7 +33,7 @@ export const ModalForm = ({ isOpened, setisOpened, addPage }: { isOpened: boolea
       role="dialog"
       tabIndex={-1}
       aria-labelledby="form-title"
-
+      ref={firstFocusable}
       className={
         isOpened ? "fixed top-0 left-0 w-full h-full right-0 bottom-0 bg-black/50"
                  : "fixed top-0 left-0 w-full h-full right-0 bottom-0 bg-black/50 hidden"

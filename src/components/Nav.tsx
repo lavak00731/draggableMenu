@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import type { pagesTypes } from "../types/pagesTypes";
 import { ModalForm } from "./ModalForm";
-import { useContext, useEffect, useState,} from "react";
+import { useContext, useEffect, useRef, useState,} from "react";
 import { Pages } from "../context/context";
 import {
   Plus,
@@ -11,12 +11,14 @@ import {
   EllipsisVertical,
 } from "lucide-react";
 import ContextualMenu from "./ContextualMenu";
+import { dragAndDrop } from "@formkit/drag-and-drop/react";
 
 export const Nav = () => {
   const [isOpened, setisOpened] = useState(false);
   const [contextIsOpen, setContextIsOpen] = useState(false);
   const [contextualPosition, setContextualPosition] = useState({x:0, y:0});
   const [pageToModify, setPageToModify] = useState<pagesTypes | null>(null)
+ const parentElem = useRef(null);
   const context = useContext(Pages);
   //close modals by keyboard
   const keyDownHandler = (e: KeyboardEvent) => {
@@ -47,26 +49,30 @@ export const Nav = () => {
         document.addEventListener('mousedown', handleClickOutside)
 
       return () => {
-        document.addEventListener('mousedown', handleClickOutside)
+        document.removeEventListener('mousedown', handleClickOutside)
       }
     })
     
-  
-  if (!context) {
-    return null;
+ 
+
+const { pages, setPages } = context as { pages: pagesTypes[]; setPages: React.Dispatch<React.SetStateAction<pagesTypes[]>> };
+
+dragAndDrop({
+  parent: parentElem,
+  state: [pages, setPages],
+});
+
+
+const addPage = (newPage: string) => {
+  const template = {
+    "id": Date.now(),
+    "name": newPage,
+    "route": "/" + newPage,
+    "content": newPage
   }
-  const { pages, setPages } = context as { pages: pagesTypes[]; setPages: React.Dispatch<React.SetStateAction<pagesTypes[]>> };
-  
-  const addPage = (newPage:string)=>{
-    const template = {
-          "id": Date.now(),
-          "name": newPage,
-          "route": "/"+newPage,
-          "content": newPage
-      }
-      const newPageCollection = [...pages, template]
-      setPages(newPageCollection);
- }
+
+  setPages(prevPages => [...prevPages, template]);
+}
   const iconsAssignation = (name: string, isActive: boolean) => {
     const color = isActive ? "#F59D0E" : "#8C93A1";    
     switch (name) {
@@ -97,14 +103,14 @@ export const Nav = () => {
     }
   }
   
-  if(pages.length > 0) {
+
     return (
     <>
-      <nav className="bg-gray-50 drop-shadow-md p-5 border-neutral-200 border-t text-center mx-auto relative">
-        <ul className="inline-flex flex-row">
-          { pages.map((page: pagesTypes) => {
+      <nav className="bg-gray-50 drop-shadow-md p-5 border-neutral-200 border-t text-center mx-auto relative flex flex-row justify-center">
+        <ul ref={parentElem}  className="inline-flex flex-row">
+          {pages.map((page: pagesTypes) => {
             return (
-              <li className="relative group hover:pr-9" key={page.id}>
+              <li className="relative group hover:pr-9" key={page.id} >
                 <NavLink
                   className={
                     ({ isActive }) =>
@@ -140,14 +146,13 @@ export const Nav = () => {
                 </button>
               </li>
             );
-          })}
-          <li className="">
+          })}          
+        </ul>
+        <div className="">
             <button onClick= {handleAddPage}  className="py-1.5 px-2.5 bg-white border-neutral border rounded-lg  text-slate-500 hover:bg-gray-400/[.35] focus-within:border-blue-600 focus-within:border-1 focus-within:bg-white shadow-[0px_0px_1px_0px_#000000] flex flex-row items-center gap-1.5 font-inter leading-5 capitalize font-medium text-sm  focus-visible:text-zinc-900 focus-visible:outline-0">
               <Plus size={16} /> Add Pages
             </button>
-          </li>
-        </ul>
-        
+          </div>
           <ContextualMenu
             contextIsOpen={contextIsOpen}
             contextualPosition={contextualPosition}
@@ -161,4 +166,4 @@ export const Nav = () => {
   );
   } 
   
-};
+
