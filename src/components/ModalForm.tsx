@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, type FormEvent } from "react";
 import { X } from "lucide-react";
 
 export const ModalForm = ({ isOpened, setisOpened, addPage }: { isOpened: boolean, setisOpened: (value: boolean) => void, addPage: (value:string) => void }) => {
@@ -22,7 +22,7 @@ export const ModalForm = ({ isOpened, setisOpened, addPage }: { isOpened: boolea
     closeModal();
     setFormvalue("")
   }
-  const handleSubmit = (e:SubmitEvent) => {
+  const handleSubmit = (e:FormEvent) => {
     e.preventDefault();
     addPage(formvalue);
     resetForm();
